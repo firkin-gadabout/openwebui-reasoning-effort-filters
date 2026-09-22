@@ -13,9 +13,15 @@ They have only been tested on **0.11.4**; other versions have not been tested bu
 
 ## Why these exist
 
-The filters use the connection's `api_type` setting instead of guessing the API from the request body. For an explicit effort selection, they send nested `reasoning.effort` for Responses connections or flat `reasoning_effort` for Chat Completions, removing the incompatible parameter.
+I wanted to choose reasoning effort from the chat instead of changing the model configuration each time, and have that choice sent in the format the connection expects.
 
-`default` leaves the request unchanged, including any reasoning settings already present. Requests for unrelated models are also unchanged. If connection configuration cannot be read, the filters fall back to Chat Completions. Astra omits `none` and includes a guard for stale saved settings containing it.
+Open WebUI users have reported that a configured `reasoning_effort` value can reach the Responses API unchanged, causing an HTTP 400 because that endpoint expects nested `reasoning.effort`. The history is documented in [#23566](https://github.com/open-webui/open-webui/issues/23566) and [#28418](https://github.com/open-webui/open-webui/issues/28418). [Discussion #28421](https://github.com/open-webui/open-webui/discussions/28421) proposes an upstream remap and discusses using nested custom parameters. These filters provide a convenient selectable control for my setup while that upstream behavior is being discussed.
+
+The filters use the `request()` hook and read the connection's `api_type`, because the body is still Chat-Completions-shaped before Open WebUI converts it for Responses. An explicit selection sends nested `reasoning.effort` for Responses or flat `reasoning_effort` for Chat Completions, removing the incompatible parameter. Responses requests retain other fields in an existing `reasoning` object.
+
+GPT-5.6 offers an explicit `none` option; Astra omits it and guards against stale saved `none` settings. `default` leaves the request unchanged—it does not remove reasoning settings already supplied elsewhere. Unrelated models are unchanged, and applying an explicit selection repeatedly during a tool loop has the same result.
+
+The connection lookup depends on Open WebUI internals (`urlIdx` and `openai.api_configs`) and has only been tested here on **0.11.4**. If configuration cannot be read, the filters assume Chat Completions. An upstream remap could make the format workaround unnecessary; the selectable effort control would still be useful.
 
 ## Installation and use
 
