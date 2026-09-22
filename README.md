@@ -1,6 +1,6 @@
 # Open WebUI Reasoning Effort Filters
 
-Per-chat reasoning effort controls for GPT-5.6 Sol/Terra/Luna and GPT-6 Astra, with connection-aware handling for Chat Completions and Responses API requests.
+Per-chat reasoning effort controls for GPT-5.6 Sol/Terra/Luna and GPT-6 Astra.
 
 ## Filters
 
@@ -9,7 +9,7 @@ Per-chat reasoning effort controls for GPT-5.6 Sol/Terra/Luna and GPT-6 Astra, w
 | [reasoning_effort_gpt56.py](reasoning_effort_gpt56.py) | `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna` | `default`, `none`, `low`, `medium`, `high`, `xhigh`, `max` |
 | [reasoning_effort_astra.py](reasoning_effort_astra.py) | `gpt-6-astra` | `default`, `low`, `medium`, `high`, `xhigh`, `max` |
 
-Both filters retain version **1.3.0** and declare **Open WebUI 0.11.4** as their minimum requirement. They have only been tested on **0.11.4**; other versions have not been tested. Use an OpenAI-compatible connection configured for the corresponding models.
+They have only been tested on **0.11.4**; other versions have not been tested but they probably work on the entire v0.11.x line. You have to use the Responses api. Chat Completions doesn't support reasoning effort.
 
 ## Why these exist
 
@@ -23,15 +23,13 @@ The filters use the connection's `api_type` setting instead of guessing the API 
 2. Paste the link for the desired filter:
    - [GPT-5.6 filter](https://github.com/firkin-gadabout/openwebui-reasoning-effort-filters/blob/main/reasoning_effort_gpt56.py)
    - [GPT-6 Astra filter](https://github.com/firkin-gadabout/openwebui-reasoning-effort-filters/blob/main/reasoning_effort_astra.py)
-3. Review the code, save and enable the function, and attach it to the appropriate model.
-4. Select the filter in the chat and set `effort` in its user valves.
+3. Review the code, save and enable the function, and attach it to the appropriate model. Set it as a Default Filter so it's on the prompt bar when those models are selected.
+4. Set `effort` when sending your prompt or leave it default.
 
 See the [Open WebUI Functions documentation](https://docs.openwebui.com/features/extensibility/plugin/functions/) for importing functions and configuring user valves.
 
 ## Source and license
 
 I vibe-coded these filters with AI assistance for my own Open WebUI setup. I’m sharing that openly because I believe transparency is good community practice.
-
-The Python files preserve the original filters’ working logic, with the declared Open WebUI requirement updated to 0.11.4. Export wrapper metadata is excluded.
 
 Licensed under the [MIT License](LICENSE).
